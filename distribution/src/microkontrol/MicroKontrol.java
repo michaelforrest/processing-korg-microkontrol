@@ -37,10 +37,10 @@ public class MicroKontrol {
 
 	Hashtable<String, Button> buttons = new Hashtable<String, Button>();
 
-	Pad[] pads = new Pad[16];
-	Fader[] faders = new Fader[8];
-	LCD[] lcds = new LCD[9];
-	LCD main;
+	public Pad[] pads = new Pad[16];
+	public Fader[] faders = new Fader[8];
+	public LCD[] lcds = new LCD[9];
+	public LCD main;
 	public final String VERSION = "0.1.0";
 
 	private MicroKontrolHardware hardware;
@@ -73,7 +73,7 @@ public class MicroKontrol {
 	}
 	void go() {
 		main.setText("");
-		main.setColour("red");
+		main.setColor("red");
 		String[] lcdText = { "Processin", "ng librar", "ry by Mic",
 				"chael For", "rrest - g", "grimacewo", "orks.com ", " 2008" };
 		for (int i = 0; i < lcdText.length; i++)
@@ -120,7 +120,7 @@ public class MicroKontrol {
 			notifyObservers();
 		}
 	}
-	
+
 
 
 	/**

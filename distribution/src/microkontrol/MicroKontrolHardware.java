@@ -7,7 +7,7 @@ import microkontrol.controls.*;
 import processing.core.*;
 import rwmidi.*;
 
-class MicroKontrolHardware {
+public class MicroKontrolHardware {
 	private static String INPUT_DEVICE_A = findInput("PORT A(.*)KORG INC.");
 	private static String INPUT_DEVICE_B = findInput("PORT B(.*)KORG INC.");
 	private static String OUTPUT_DEVICE_A = findOutput("CTRL(.*)KORG INC.");
@@ -104,10 +104,10 @@ class MicroKontrolHardware {
 		}
 
 		public void update(Observable o, Object e) {
-			String text = model.text + "        "; // really grubby way to pad
+			String text = model.getText() + "        "; // really grubby way to pad
 			// the string...
 			byte[] t = text.getBytes();
-			int[] ints = { DISPLAY_LCD, 9, colour(model.colour) + id, t[0],
+			int[] ints = { DISPLAY_LCD, 9, colour(model.getColour()) + id, t[0],
 					t[1], t[2], t[3], t[4], t[5], t[6], t[7] };
 			send(ints);
 		}
@@ -123,7 +123,7 @@ class MicroKontrolHardware {
 
 	public void sysexReceived(SysexMessage sysex) {
 		byte[] m = sysex.getMessage();
-		PApplet.println("received sysex " + sysex);
+		//PApplet.println("received sysex " + sysex);
 		byte command = m[5];
 		// if(marker == 0x40) onEnterNativeMode();
 		// if(command == DATA_DUMP_COMMAND) receiveDataDump(m);
