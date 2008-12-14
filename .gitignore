@@ -1,5 +1,5 @@
 .DS_Store
-bin/
-build/
-distribution/
-reference/
+bin
+build
+distribution
+reference
