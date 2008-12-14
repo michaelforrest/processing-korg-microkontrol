@@ -88,15 +88,18 @@ public class MicroKontrolHardware {
 			pad.listen(this);
 		}
 
-		void turn(int state) {
-			send(new int[] { DISPLAY_LED_COMMAND, id, state });
-		}
 		public void pressed() {
-			int state = pad.isOn() ? ON : OFF;
-			turn(state);
 		}
 
 		public void released() {
+		}
+
+		public void updated() {
+			int state = pad.isOn() ? ON : OFF;
+			turn(state);
+		}
+		void turn(int state) {
+			send(new int[] { DISPLAY_LED_COMMAND, id, state });
 		}
 	}
 
@@ -126,16 +129,17 @@ public class MicroKontrolHardware {
 	}
 
 	byte DATA_DUMP_COMMAND = (byte) 0x5F;
+
 	byte PAD_OUTPUT_COMMAND = (byte) 0x45;
-	byte SLIDER_OUTPUT_COMMAND = (byte) 0x44;
 	byte ENCODER_OUTPUT_COMMAND = (byte) 0x43;
+	byte SLIDER_OUTPUT_COMMAND = (byte) 0x44;
 	byte PEDAL_OUTPUT_COMMAND = (byte) 0x47;
 	byte SWITCH_OUTPUT_COMMAND = (byte) 0x48;
 	byte JOYSTICK_OUTPUT_COMMAND = (byte) 0x4b;
 
 	public void sysexReceived(SysexMessage sysex) {
 		byte[] m = sysex.getMessage();
-		//PApplet.println("received sysex " + sysex);
+//		PApplet.println("received sysex " + sysex.toString());
 		byte command = m[5];
 		// if(marker == 0x40) onEnterNativeMode();
 		// if(command == DATA_DUMP_COMMAND) receiveDataDump(m);
