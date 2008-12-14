@@ -163,8 +163,7 @@ public class MicroKontrolHardware {
 
 	void receiveEncoder(byte id, byte changeCode) {
 		int change = (changeCode >= 64) ? -(128 - changeCode) : changeCode;
-		PApplet.println("encoder value " + changeCode + " ->" + change);
-
+		//PApplet.println("encoder value " + changeCode + " ->" + change);
 		model.encoders[id].set(change);
 	}
 
