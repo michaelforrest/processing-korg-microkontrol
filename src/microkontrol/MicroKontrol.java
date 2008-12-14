@@ -82,6 +82,7 @@ public class MicroKontrol {
 					"MicroKontrolHardware.input_device_a = \"" + MicroKontrolHardware.input_device_a + "\";\n" +
 					"MicroKontrolHardware.input_device_b = \"" + MicroKontrolHardware.input_device_b + "\";\n" +
 					"MicroKontrolHardware.output_device = \"" + MicroKontrolHardware.output_device + "\";");
+			PApplet.println("\nNote that you can still use the MicroKontrol class as normal even if the hardware unit is not connected.");
 		}
 
 		go();
