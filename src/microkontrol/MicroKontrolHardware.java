@@ -24,12 +24,10 @@ public class MicroKontrolHardware {
 
 	MicroKontrol model;
 
-	ButtonView[] pads;
-	LCDView[] lcds;
-
-
 	public static final String[] BUTTON_NAMES = { "<", ">", "ENTER",
 			"HEX LOCK", "EXIT", "SCENE", "MESSAGE", "SETTING", "JOYSTICK" };
+
+	public static final String[] BUTTON_LIGHTS = {"SETTING","MESSAGE","SCENE","EXIT","ENTER","HEX LOCK"};//,"Tempo"//,">Grn","<Grn",">Red","<Red"};
 
 	private int COMMAND_BYTE = 5; // sysex - index of command byte
 
@@ -49,26 +47,33 @@ public class MicroKontrolHardware {
 		setupIO();
 		addPadViews();
 		addLCDViews();
+		addButtonViews();
 	}
 
+	private void addButtonViews() {
+		for (int i = 0; i < BUTTON_LIGHTS.length; i++) {
+			String id = BUTTON_LIGHTS[i];
+			Button button = model.buttons.get(id);
+			new ButtonView(0x10 + i, button);
+		}
+
+	}
 	void addLCDViews() {
-		lcds = new LCDView[model.lcds.length];
 		for (int i = 0; i < model.lcds.length; i++) {
-			lcds[i] = new LCDView(i, model.lcds[i]);
+			new LCDView(i, model.lcds[i]);
 		}
 	}
 
 	void addPadViews() {
-		pads = new ButtonView[model.pads.length];
 		for (int i = 0; i < model.pads.length; i++) {
 			Button pad = model.pads[i];
 			// pads have incremental IDs - this maps onto how the hardware works
 			// (and hence is a view-based id)
-			pads[i] = new ButtonView(i, pad);
+			new ButtonView(i, pad);
 		}
 	}
 
-	public class ButtonView implements Observer {
+	public class ButtonView implements ButtonListener {
 		int DISPLAY_LED_COMMAND = 0x01;
 		int OFF = 0;
 		int ON = 32;
@@ -80,17 +85,18 @@ public class MicroKontrolHardware {
 		ButtonView(int id, Button pad) {
 			this.id = id;
 			this.pad = pad;
-			pad.addObserver(this);
-		}
-
-		public void update(Observable o, Object e) {
-			int state = pad.isOn() ? ON : OFF;
-			turn(state);
+			pad.listen(this);
 		}
 
 		void turn(int state) {
 			send(new int[] { DISPLAY_LED_COMMAND, id, state });
+		}
+		public void pressed() {
+			int state = pad.isOn() ? ON : OFF;
+			turn(state);
+		}
 
+		public void released() {
 		}
 	}
 
@@ -154,7 +160,12 @@ public class MicroKontrolHardware {
 
 	void receiveSwitch(byte id, byte value) {
 		String name = BUTTON_NAMES[(int) id];
-		// MicroKontrol.Button button =
+		Button button = model.buttons.get(name);
+		if(value == 0){
+			button.release();
+		}else{
+			button.press();
+		}
 	}
 
 	void receivePedal(byte state) {
@@ -173,9 +184,14 @@ public class MicroKontrolHardware {
 
 	void receivePad(byte info) {
 		int id = info & 0x0f;
+		Pad pad = model.pads[id];
 		int conditionBit = 64 & info;
-		if (conditionBit == 0) return; // off state
-		((Pad) model.pads[id]).toggle();
+		if (conditionBit == 0){
+			pad.release();
+		}else{
+			pad.press();
+		}
+
 	}
 
 	/***************************************************************************
