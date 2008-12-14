@@ -73,6 +73,15 @@ public class MicroKontrol {
 		if (MicroKontrolHardware.isAvailable()){
 			hardware = new MicroKontrolHardware(this);
 			PApplet.println("Found and initialized MicroKontrol hardware.");
+		}else{
+			PApplet.println("Couldn't find hardware!");
+			PApplet.println("Available interfaces: " );
+			MicroKontrolHardware.displayInterfaces();
+			PApplet.println("\nIf you can see your device ports in the list above, do the following before instantiating MicroKontrol, substituting the correct port names (regular expressions work):");
+			PApplet.println(
+					"MicroKontrolHardware.input_device_a = \"" + MicroKontrolHardware.input_device_a + "\";\n" +
+					"MicroKontrolHardware.input_device_b = \"" + MicroKontrolHardware.input_device_b + "\";\n" +
+					"MicroKontrolHardware.output_device = \"" + MicroKontrolHardware.output_device + "\";");
 		}
 
 		go();

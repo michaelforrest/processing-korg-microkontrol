@@ -14,9 +14,9 @@ import rwmidi.RWMidi;
 import rwmidi.SysexMessage;
 
 public class MicroKontrolHardware {
-	private static String INPUT_DEVICE_A = findInput("PORT A(.*)KORG INC.");
-	private static String INPUT_DEVICE_B = findInput("PORT B(.*)KORG INC.");
-	private static String OUTPUT_DEVICE_A = findOutput("CTRL(.*)KORG INC.");
+	public static String input_device_a = "PORT A(.*)KORG INC.";
+	public static String input_device_b = "PORT B(.*)KORG INC.";
+	public static String output_device = "CTRL(.*)KORG INC.";
 
 	MidiInput inputA;
 	MidiInput inputB;
@@ -219,9 +219,12 @@ public class MicroKontrolHardware {
 
 	public static void displayInterfaces() {
 		String[] inputs = RWMidi.getInputDeviceNames();
-		PApplet.println(PApplet.join(inputs, ","));
+		PApplet.println("INPUTS: ");
+		PApplet.println(PApplet.join(inputs, "\n"));
+		PApplet.println("OUTPUTS: ");
 		String[] outputs = RWMidi.getOutputDeviceNames();
-		PApplet.println(PApplet.join(outputs, ","));
+		PApplet.println(PApplet.join(outputs,  "\n"));
+
 	}
 
 	private int EXCLUSIVE = 0xf0;
@@ -306,11 +309,11 @@ public class MicroKontrolHardware {
 
 	void setupIO() {
 		//displayInterfaces();
-		inputA = RWMidi.getInputDevice(INPUT_DEVICE_A).createInput(this);
+		inputA = RWMidi.getInputDevice(findInput(input_device_a)).createInput(this);
 		PApplet.println("Input A: " + inputA.getName());
-		inputB = RWMidi.getInputDevice(INPUT_DEVICE_B).createInput(this);
+		inputB = RWMidi.getInputDevice(findInput(input_device_b)).createInput(this);
 		PApplet.println("Input B: " + inputB.getName());
-		output = RWMidi.getOutputDevice(OUTPUT_DEVICE_A).createOutput();
+		output = RWMidi.getOutputDevice(findOutput(output_device)).createOutput();
 		PApplet.println("output : " + output.getName());
 		send(NATIVE);
 		send(PACKET1);
@@ -342,7 +345,7 @@ public class MicroKontrolHardware {
 	// println("controller " + controller.getValue());
 	// }
 	public static boolean isAvailable() {
-		return INPUT_DEVICE_A != null;
+		return findInput(input_device_a) != null;
 	}
 	private static String findOutput(String regex) {
 		return findInArray(regex, RWMidi.getOutputDeviceNames());
