@@ -25,7 +25,7 @@ public class MicroKontrolHardware {
 	MicroKontrol model;
 
 	public static final String[] BUTTON_NAMES = { "<", ">", "ENTER",
-			"HEX LOCK", "EXIT", "SCENE", "MESSAGE", "SETTING", "JOYSTICK" };
+			"HEX LOCK", "EXIT", "SCENE", "MESSAGE", "SETTING", "JOYSTICK", "PEDAL" };
 
 	public static final String[] BUTTON_LIGHTS = {"SETTING","MESSAGE","SCENE","EXIT","ENTER","HEX LOCK"};//,"Tempo"//,">Grn","<Grn",">Red","<Red"};
 
@@ -154,8 +154,11 @@ public class MicroKontrolHardware {
 			PApplet.println(m[i]);
 	}
 
-	void receiveJoystick(byte x, byte y) {
-
+	void receiveJoystick(byte rawX, byte rawY) {
+		Joystick joystick = model.joystick;
+		float x = ((float) rawX - 64) / 64f;
+		float y = ((float) rawY - 64) / 64f;
+		joystick.set(x,y);
 	}
 
 	void receiveSwitch(byte id, byte value) {
@@ -170,6 +173,11 @@ public class MicroKontrolHardware {
 
 	void receivePedal(byte state) {
 		boolean on = state == (byte) 127;
+		if(on){
+			model.pedal.press();
+		}else{
+			model.pedal.release();
+		}
 	}
 
 	void receiveEncoder(byte id, byte changeCode) {

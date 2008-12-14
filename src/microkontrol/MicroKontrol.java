@@ -46,6 +46,7 @@ public class MicroKontrol {
 	public LCD[] lcds = new LCD[9];
 	public LCD main;
 	public Joystick joystick = new Joystick();
+	public Button pedal = new Button();
 
 	public MicroKontrol(PApplet applet) {
 		this.applet = applet;
