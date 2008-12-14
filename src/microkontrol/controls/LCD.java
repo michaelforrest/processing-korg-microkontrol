@@ -27,7 +27,10 @@ public class LCD extends Observable {
 		this.colour = color;
 		update();
 	}
-
+	public void set(String text, String color){
+		this.text = text;
+		setColor(color);
+	}
 	public void update() {
 		setChanged();
 		notifyObservers();

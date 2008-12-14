@@ -1,11 +1,17 @@
 package microkontrol;
 
-import java.util.*;
+
+import java.util.Hashtable;
+import java.util.Observable;
+import java.util.Observer;
 
 import microkontrol.controls.*;
-
-import processing.core.*;
-import rwmidi.*;
+import processing.core.PApplet;
+import rwmidi.MidiInput;
+import rwmidi.MidiOutput;
+import rwmidi.Note;
+import rwmidi.RWMidi;
+import rwmidi.SysexMessage;
 
 public class MicroKontrolHardware {
 	private static String INPUT_DEVICE_A = findInput("PORT A(.*)KORG INC.");
@@ -55,7 +61,7 @@ public class MicroKontrolHardware {
 	void addPadViews() {
 		pads = new ButtonView[model.pads.length];
 		for (int i = 0; i < model.pads.length; i++) {
-			MicroKontrol.Button pad = model.pads[i];
+			Button pad = model.pads[i];
 			// pads have incremental IDs - this maps onto how the hardware works
 			// (and hence is a view-based id)
 			pads[i] = new ButtonView(i, pad);
@@ -68,17 +74,17 @@ public class MicroKontrolHardware {
 		int ON = 32;
 		int ONE_SHOT = 64;
 		int BLINK = 96;
-		MicroKontrol.Button pad;
+		Button pad;
 		private int id;
 
-		ButtonView(int id, MicroKontrol.Button pad) {
+		ButtonView(int id, Button pad) {
 			this.id = id;
 			this.pad = pad;
 			pad.addObserver(this);
 		}
 
 		public void update(Observable o, Object e) {
-			int state = pad.isOn ? ON : OFF;
+			int state = pad.isOn() ? ON : OFF;
 			turn(state);
 		}
 
@@ -155,8 +161,10 @@ public class MicroKontrolHardware {
 		boolean on = state == (byte) 127;
 	}
 
-	void receiveEncoder(byte id, byte change) {
-
+	void receiveEncoder(byte id, byte changeCode) {
+		int change = (changeCode >= 64) ? -(128 - changeCode) : changeCode;
+		//PApplet.println("encoder value " + changeCode + " ->" + change);
+		model.encoders[id].set(change);
 	}
 
 	void receiveFader(byte id, byte value) {
@@ -167,7 +175,7 @@ public class MicroKontrolHardware {
 		int id = info & 0x0f;
 		int conditionBit = 64 & info;
 		if (conditionBit == 0) return; // off state
-		((MicroKontrol.Pad) model.pads[id]).toggle();
+		((Pad) model.pads[id]).toggle();
 	}
 
 	/***************************************************************************

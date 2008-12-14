@@ -22,7 +22,8 @@
 package microkontrol;
 
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Observable;
 
 import microkontrol.controls.*;
 import processing.core.PApplet;
@@ -34,27 +35,32 @@ import processing.core.PApplet;
 public class MicroKontrol {
 
 	PApplet applet;
-
-	Hashtable<String, Button> buttons = new Hashtable<String, Button>();
-
-	public Pad[] pads = new Pad[16];
-	public Fader[] faders = new Fader[8];
-	public LCD[] lcds = new LCD[9];
-	public LCD main;
 	public final String VERSION = "0.1.0";
 
 	private MicroKontrolHardware hardware;
 
+	public Pad[] pads = new Pad[16];
+	public Hashtable<String, Button> buttons = new Hashtable<String, Button>();
+	public Encoder[] encoders = new Encoder[9];
+	public Fader[] faders = new Fader[8];
+	public LCD[] lcds = new LCD[9];
+	public LCD main;
+	public Joystick joystick = new Joystick();
+
+
 	public MicroKontrol(PApplet applet) {
 		this.applet = applet;
 
-		for (int i = 0; i < 16; i++)
+		for (int i = 0; i < pads.length; i++)
 			pads[i] = new Pad();
 
-		for (int i = 0; i < 8; i++)
+		for(int i = 0; i < encoders.length; i++)
+			encoders[i] = new Encoder();
+
+		for (int i = 0; i < faders.length; i++)
 			faders[i] = new Fader();
 
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < lcds.length; i++)
 			lcds[i] = new LCD();
 
 		main = lcds[8];
@@ -80,49 +86,6 @@ public class MicroKontrol {
 			lcds[i].setText(lcdText[i]);
 
 	}
-	public class Button extends Observable {
-		boolean isOn = false;
-
-		void set(boolean on) {
-			isOn = on;
-			update();
-		}
-
-		void toggle() {
-			PApplet.println("Toggling button");
-			isOn = !isOn;
-			update();
-		}
-
-		void update() {
-			setChanged();
-			notifyObservers();
-		}
-	}
-
-	public class Pad extends Button {
-
-	}
-
-	public class Joystick {
-
-	}
-
-	public class Fader extends Observable {
-		int value;
-		float getProportion() {
-			return (float) value / 127.0f;
-		}
-
-		void set(int value) {
-			this.value = value;
-			setChanged();
-			notifyObservers();
-		}
-	}
-
-
-
 	/**
 	 * return the version of the library.
 	 *
