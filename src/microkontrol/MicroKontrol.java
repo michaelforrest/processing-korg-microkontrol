@@ -47,7 +47,6 @@ public class MicroKontrol {
 	public LCD main;
 	public Joystick joystick = new Joystick();
 
-
 	public MicroKontrol(PApplet applet) {
 		this.applet = applet;
 

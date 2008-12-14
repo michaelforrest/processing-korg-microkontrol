@@ -23,20 +23,23 @@ public class Button {
 	public void press(){
 		if(mode == TOGGLE) toggle();
 		for (int i = 0; i < listeners.size(); i++) {
-			dispatchPressed(listeners.get(i));
+			dispatch(listeners.get(i), "pressed");
 		}
 	}
-	private void dispatchPressed(ButtonListener listener) {
+	private void dispatch(ButtonListener listener, String methodName) {
 		try {
-			Method handler = listener.getClass().getMethod("pressed");
+			Method handler = listener.getClass().getMethod(methodName);
 			handler.invoke(listener);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	public void release(){
-
+		for (int i = 0; i < listeners.size(); i++) {
+			dispatch(listeners.get(i), "released");
+		}
 	}
+
 	public void toggle() {
 		isOn = !isOn;
 	}
