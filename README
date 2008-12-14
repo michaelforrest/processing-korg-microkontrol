@@ -1,3 +1,5 @@
 This is a library for use with Processing (processing.org)
 
-Install by dropping the 
+To install... you have to put it into your sketches/libraries folder. i.e. you should have:
+
+~/Documents/Processing/libraries/MicroKontrol/library/MicroKontrol.jar
