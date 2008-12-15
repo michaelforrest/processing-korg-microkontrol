@@ -87,6 +87,9 @@ public class MicroKontrol {
 
 		go();
 	}
+	public void plugKeyboard(Object object){
+		hardware.plugKeyboard(object);
+	}
 	void go() {
 		main.setText("");
 		main.setColor("red");

@@ -1,21 +1,53 @@
 package microkontrol.controls;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class Button {
+public class Button extends KorgControl{
+	public static final String UPDATED = "updated";
+
+	public static final String RELEASED = "released";
+
+	public static final String PRESSED = "pressed";
+
 	boolean isOn = false;
 
 	private ArrayList<ButtonListener> listeners = new ArrayList<ButtonListener>();
+
+	private ArrayList<CallBack> pressHandlers = new ArrayList<CallBack>();
+
+	private ArrayList<CallBack> releaseHandlers = new ArrayList<CallBack>();
+
+	private ArrayList<CallBack> updateHandlers = new ArrayList<CallBack>();
 
 	public boolean isOn(){
 		return isOn;
 	}
 	public void press(){
-		dispatchToListeners("pressed");
+		dispatchToListeners(PRESSED);
+		dispatchTo(pressHandlers);
+	}
+	private void dispatchTo(ArrayList<CallBack> handlers) {
+		for (int i = 0; i < handlers.size(); i++) {
+			CallBack handler =  handlers.get(i);
+			try {
+				handler.invoke();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
 	public void release(){
-		dispatchToListeners("released");
+		dispatchToListeners(RELEASED);
 	}
 	public void set(boolean on) {
 		isOn = on;
@@ -26,10 +58,8 @@ public class Button {
 		update();
 	}
 	private void update() {
-		dispatchToListeners("updated");
+		dispatchToListeners(UPDATED);
 	}
-
-
 
 	private void dispatchToListeners(String methodName) {
 		for (int i = 0; i < listeners.size(); i++) {
@@ -47,5 +77,26 @@ public class Button {
 	public void listen(ButtonListener listener) {
 		listeners.add(listener);
 	}
+	public void listen(String eventName, Object object, String methodName) {
+		Method handler;
+		try {
+			handler = object.getClass().getMethod(methodName);
+			ArrayList<CallBack> list = getCallBackListByName(eventName);
+			list.add(new CallBack(object,handler));
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private ArrayList<CallBack> getCallBackListByName(String eventName) {
+		if(eventName.equals(PRESSED)) return pressHandlers;
+		if(eventName.equals(RELEASED)) return releaseHandlers;
+		if(eventName.equals(UPDATED)) return updateHandlers;
+		return null;
+	}
+
 }
 

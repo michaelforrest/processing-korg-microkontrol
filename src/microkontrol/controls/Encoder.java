@@ -3,11 +3,22 @@ package microkontrol.controls;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class Encoder {
+public class Encoder extends KorgControl{
 	private int value = 0;
 	private int change;
 
 	private ArrayList<EncoderListener> listeners = new ArrayList<EncoderListener>();
+
+	private ArrayList<CallBack> callbacks = new ArrayList<CallBack>();
+
+	public void listen(Object object, String methodName){
+		try {
+			Method handler = object.getClass().getMethod(methodName,new Class[] { Integer.class });
+			callbacks.add(new CallBack(object,handler));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void listen(EncoderListener listener) {
 		listeners.add(listener);
@@ -20,6 +31,14 @@ public class Encoder {
 			EncoderListener listener = (EncoderListener) listeners.get(i);
 			dispatchMoved(listener);
 		}
+		for (int i = 0; i < callbacks.size(); i++) {
+			CallBack callback = callbacks.get(i);
+			try {
+				callback.getMethod().invoke(callback.getObject(), new Object[] { change });
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void dispatchMoved(EncoderListener listener) {
@@ -29,6 +48,7 @@ public class Encoder {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public int getChange() {
