@@ -50,7 +50,7 @@ public class MicroKontrol {
 
 	public MicroKontrol(PApplet applet) {
 		this.applet = applet;
-
+		
 		for (int i = 0; i < pads.length; i++)
 			pads[i] = new Pad();
 

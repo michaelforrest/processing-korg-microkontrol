@@ -142,7 +142,7 @@ public class MicroKontrolHardware {
 //		PApplet.println("received sysex " + sysex.toString());
 		byte command = m[5];
 		// if(marker == 0x40) onEnterNativeMode();
-		// if(command == DATA_DUMP_COMMAND) receiveDataDump(m);
+//		if(command == DATA_DUMP_COMMAND) receiveDataDump(m);
 		if (command == PAD_OUTPUT_COMMAND) receivePad(m[COMMAND_BYTE + 1]);
 		if (command == SLIDER_OUTPUT_COMMAND) receiveFader(m[6], m[7]);
 		if (command == ENCODER_OUTPUT_COMMAND) receiveEncoder(m[6], m[7]);
