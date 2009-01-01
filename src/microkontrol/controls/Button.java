@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import processing.core.PApplet;
+
 public class Button extends KorgControl{
 	public static final String UPDATED = "updated";
 
@@ -33,15 +35,9 @@ public class Button extends KorgControl{
 			CallBack handler =  handlers.get(i);
 			try {
 				handler.invoke();
-			} catch (IllegalArgumentException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				PApplet.println("error in pad - dispatchTo() for handler " + handler);
 			}
 		}
 
