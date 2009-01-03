@@ -7,7 +7,10 @@ void setup(){
   microKontrol = new MicroKontrol(this);
 
   new KorgButtonListener("JOYSTICK");
-  new KorgButtonListener("PEDAL");
+  
+  
+  
+  
 }
 public class KorgButtonListener implements ButtonListener{
   String name;

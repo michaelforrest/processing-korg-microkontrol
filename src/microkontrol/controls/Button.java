@@ -1,6 +1,5 @@
 package microkontrol.controls;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -23,9 +22,8 @@ public class Button extends KorgControl{
 
 	private ArrayList<CallBack> updateHandlers = new ArrayList<CallBack>();
 
-	public boolean isOn(){
-		return isOn;
-	}
+	public final LED led = new LED();
+
 	public void press(){
 		dispatchToListeners(PRESSED);
 		dispatchTo(pressHandlers);
@@ -45,17 +43,7 @@ public class Button extends KorgControl{
 	public void release(){
 		dispatchToListeners(RELEASED);
 	}
-	public void set(boolean on) {
-		isOn = on;
-		update();
-	}
-	public void toggle() {
-		isOn = !isOn;
-		update();
-	}
-	private void update() {
-		dispatchToListeners(UPDATED);
-	}
+
 
 	private void dispatchToListeners(String methodName) {
 		for (int i = 0; i < listeners.size(); i++) {

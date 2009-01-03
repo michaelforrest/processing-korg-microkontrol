@@ -73,33 +73,24 @@ public class MicroKontrolHardware {
 		}
 	}
 
-	public class ButtonView implements ButtonListener {
+	public class ButtonView implements Observer   {
 		int DISPLAY_LED_COMMAND = 0x01;
-		int OFF = 0;
-		int ON = 32;
-		int ONE_SHOT = 64;
-		int BLINK = 96;
+
 		Button pad;
 		private int id;
 
 		ButtonView(int id, Button pad) {
 			this.id = id;
 			this.pad = pad;
-			pad.listen(this);
+			pad.led.addObserver(this);
 		}
 
-		public void pressed() {
-		}
-
-		public void released() {
-		}
-
-		public void updated() {
-			int state = pad.isOn() ? ON : OFF;
-			turn(state);
-		}
 		void turn(int state) {
 			send(new int[] { DISPLAY_LED_COMMAND, id, state });
+		}
+
+		public void update(Observable o, Object arg) {
+			turn((Integer) arg);
 		}
 	}
 
