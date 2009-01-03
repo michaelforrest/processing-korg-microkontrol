@@ -34,6 +34,7 @@ import processing.core.PApplet;
  */
 public class MicroKontrol {
 
+	private static MicroKontrol instance;
 	PApplet applet;
 	public final String VERSION = "0.1.0";
 
@@ -48,9 +49,16 @@ public class MicroKontrol {
 	public Joystick joystick = new Joystick();
 	public Button pedal = new Button();
 
+	public static MicroKontrol getInstance(){
+		if(instance==null) PApplet.println("You need to call MicroKontrol.init(papplet) before you can call getInstance()");
+		return instance;
+	}
+	public static void init(PApplet applet){
+		instance = new MicroKontrol(applet);
+	}
 	public MicroKontrol(PApplet applet) {
 		this.applet = applet;
-		
+
 		for (int i = 0; i < pads.length; i++)
 			pads[i] = new Pad();
 
