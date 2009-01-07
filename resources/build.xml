@@ -42,7 +42,7 @@
 	<property name='libraryName' value='MicroKontrol'/>
 
 <!-- #### (8) give your library a name. edit value.   #### -->
-	<property name='versionNumber' value='0.1.2'/>
+	<property name='versionNumber' value='0.1.3'/>
 
 <!-- #### (9) your contact url. edit value. #### -->
 	<property name='yourLink' value='http://grimaceworks.com'/>
