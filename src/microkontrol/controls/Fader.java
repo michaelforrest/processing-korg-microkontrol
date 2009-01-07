@@ -10,7 +10,9 @@ public class Fader{
 	public float getProportion() {
 		return (float) value / 127.0f;
 	}
-
+	public int getValue(){
+		return value;
+	}
 	public void set(int value) {
 		this.value = value;
 		for (int i = 0; i < listeners.size(); i++) {

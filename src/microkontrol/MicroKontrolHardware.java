@@ -79,18 +79,45 @@ public class MicroKontrolHardware {
 		Button pad;
 		private int id;
 
+		private boolean blinking;
+
+		private int blinkFrame = 0;
+
+		private boolean blinkState;
+
 		ButtonView(int id, Button pad) {
 			this.id = id;
 			this.pad = pad;
 			pad.led.addObserver(this);
+			model.applet.registerDraw(this);
 		}
-
-		void turn(int state) {
+		public void draw(){
+			if(blinking) {
+				blinkFrame ++;
+				if(blinkFrame > 4){
+					blinkFrame = 0;
+					blinkState = !blinkState;
+					set( blinkState ? LED.BLINK : LED.ON );
+				}
+			}
+		}
+		void set(int state) {
 			send(new int[] { DISPLAY_LED_COMMAND, id, state });
 		}
 
 		public void update(Observable o, Object arg) {
-			turn((Integer) arg);
+			if(arg == LED.BLINK){
+				startBlinking();
+			}else{
+				stopBlinking();
+				set((Integer) arg);
+			}
+		}
+		private void startBlinking() {
+			blinking = true;
+		}
+		private void stopBlinking() {
+			blinking = false;
 		}
 	}
 

@@ -8,7 +8,7 @@ void setup(){
 
   new KorgButtonListener("JOYSTICK");
   
-  
+  microKontrol.pads[0].led.set(LED.ON);
   
   
 }
