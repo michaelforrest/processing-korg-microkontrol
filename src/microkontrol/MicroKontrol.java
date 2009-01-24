@@ -38,7 +38,7 @@ public class MicroKontrol {
 	PApplet applet;
 	public final String VERSION = "0.1.0";
 
-	private MicroKontrolHardware hardware;
+	private MicroKontrolDevice hardware;
 
 	public Pad[] pads = new Pad[16];
 	public Hashtable<String, Button> buttons = new Hashtable<String, Button>();
@@ -91,12 +91,16 @@ public class MicroKontrol {
 					"MicroKontrolHardware.input_device_b = \"" + MicroKontrolHardware.input_device_b + "\";\n" +
 					"MicroKontrolHardware.output_device = \"" + MicroKontrolHardware.output_device + "\";");
 			PApplet.println("\nNote that you can still use the MicroKontrol class as normal even if the hardware unit is not connected.");
+			hardware  = new MicroKontrolHardwareStub(applet);
 		}
 
 		go();
 	}
 	public void plugKeyboard(Object object){
 		hardware.plugKeyboard(object);
+	}
+	public void plugPitchBend(Object object){
+		hardware.plugPitchBend(object);
 	}
 	void go() {
 		main.setText("");

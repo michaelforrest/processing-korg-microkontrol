@@ -13,7 +13,7 @@ import rwmidi.Note;
 import rwmidi.RWMidi;
 import rwmidi.SysexMessage;
 
-public class MicroKontrolHardware {
+public class MicroKontrolHardware implements MicroKontrolDevice {
 	public static String input_device_a = "PORT A(.*)KORG INC.";
 	public static String input_device_b = "PORT B(.*)KORG INC.";
 	public static String output_device = "CTRL(.*)KORG INC.";
@@ -352,9 +352,6 @@ public class MicroKontrolHardware {
 		send(PACKET4);
 	}
 
-	void plugKeyboard(Object to) {
-		inputB.plug(to);
-	}
 
 	/**
 	 * MIDI IN
@@ -392,4 +389,12 @@ public class MicroKontrolHardware {
 	private static String findInput(String regex) {
 		return findInArray(regex, RWMidi.getInputDeviceNames());
 	}
+	public void plugPitchBend(Object object) {
+		inputB.plug(object,"pitchBendReceived");
+
+	}
+	public void plugKeyboard(Object to) {
+		inputB.plug(to);
+	}
+
 }

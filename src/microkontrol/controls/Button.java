@@ -42,6 +42,7 @@ public class Button extends KorgControl{
 	}
 	public void release(){
 		dispatchToListeners(RELEASED);
+		dispatchTo(releaseHandlers);
 	}
 
 

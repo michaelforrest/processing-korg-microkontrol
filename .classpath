@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Applications/Processing.app/Contents/Resources/Java/core.jar"/>
+	<classpathentry kind="lib" path="/Grimonium/src/rwmidi"/>
 	<classpathentry kind="lib" path="/Applications/Processing.app/Contents/Resources/Java/libraries/rwmidi/library/rwmidi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
